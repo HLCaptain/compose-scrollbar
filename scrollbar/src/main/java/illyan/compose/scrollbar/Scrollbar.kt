@@ -1,9 +1,17 @@
 /*
- * Copyright (c) 2022-2023. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
- * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
- * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
- * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
- * Vestibulum commodo. Ut rhoncus gravida arcu.
+ * Copyright (c) 2022-2023 Balázs Püspök-Kiss (Illyan)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package illyan.compose.scrollbar
@@ -14,20 +22,9 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.LazyGridState
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -46,7 +43,6 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -55,7 +51,8 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collectLatest
-import timber.log.Timber
+
+//import timber.log.Timber
 
 // https://gist.github.com/mxalbert1996/33a360fcab2105a31e5355af98216f5a
 
@@ -281,7 +278,7 @@ private fun Modifier.drawScrollbar(
                 available: Offset,
                 source: NestedScrollSource
             ): Offset {
-                Timber.v("Scroll position: x = ${consumed.x} y = ${consumed.y}")
+//                Timber.v("Scroll position: x = ${consumed.x} y = ${consumed.y}")
                 val delta = if (orientation == Orientation.Horizontal) consumed.x else consumed.y
                 if (delta != 0f) scrolled.tryEmit(Unit)
                 return Offset.Zero
@@ -321,82 +318,6 @@ private val BarColor: Color
 private val Thickness = 4.dp
 private val FadeOutAnimationSpec =
     tween<Float>(durationMillis = ViewConfiguration.getScrollBarFadeDuration())
-
-@Preview(widthDp = 400, heightDp = 400, showBackground = true)
-@Composable
-internal fun ScrollbarPreview() {
-    val state = rememberScrollState()
-    Column(
-        modifier = Modifier
-            .drawVerticalScrollbar(state)
-            .verticalScroll(state),
-    ) {
-        repeat(50) {
-            Text(
-                text = "Item ${it + 1}",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            )
-        }
-    }
-}
-
-@Preview(widthDp = 400, heightDp = 400, showBackground = true)
-@Composable
-internal fun LazyListScrollbarPreview() {
-    val state = rememberLazyListState()
-    LazyColumn(
-        modifier = Modifier.drawVerticalScrollbar(state),
-        state = state
-    ) {
-        items(50) {
-            Text(
-                text = "Item ${it + 1}",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            )
-        }
-    }
-}
-
-@Preview(widthDp = 400, showBackground = true)
-@Composable
-internal fun HorizontalScrollbarPreview() {
-    val state = rememberScrollState()
-    Row(
-        modifier = Modifier
-            .drawHorizontalScrollbar(state)
-            .horizontalScroll(state)
-    ) {
-        repeat(50) {
-            Text(
-                text = (it + 1).toString(),
-                modifier = Modifier
-                    .padding(horizontal = 8.dp, vertical = 16.dp)
-            )
-        }
-    }
-}
-
-@Preview(widthDp = 400, showBackground = true)
-@Composable
-internal fun LazyListHorizontalScrollbarPreview() {
-    val state = rememberLazyListState()
-    LazyRow(
-        modifier = Modifier.drawHorizontalScrollbar(state),
-        state = state
-    ) {
-        items(50) {
-            Text(
-                text = (it + 1).toString(),
-                modifier = Modifier
-                    .padding(horizontal = 8.dp, vertical = 16.dp)
-            )
-        }
-    }
-}
 
 // source: https://stackoverflow.com/a/68056586/16720445
 fun Modifier.simpleVerticalScrollbar(
